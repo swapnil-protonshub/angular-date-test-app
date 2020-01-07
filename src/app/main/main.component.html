@@ -1,0 +1,43 @@
+<div>
+  <div>
+    <label>Search</label>
+    <input type="text" [(ngModel)]="searchTxt" class="form-control mtp10" name="searchTxt" placeholder="Search by title">
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="table-header" *ngFor="let col of displayedColumns">{{col.replace('_', ' ')}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr (click)="show(d)" class="pointer-cursor" *ngFor="let d of data | search:searchTxt | paginate: { itemsPerPage: 5, currentPage: currentPage, totalItems: data?.count}">
+          <td *ngFor="let col of displayedColumns">{{col === 'created_at' ? (d[col] | date:'dd/MM/yyyy') : d[col]}}</td>
+        </tr>
+        <button id="openModalButton" [hidden]="true" data-toggle="modal" data-target="#dataModal" data-backdrop="static" data-keyboard="false">Open Modal</button>
+      </tbody>
+    </table>
+  </div>
+
+  <pagination-controls class="text-center" (pageChange)="currentPage = $event"></pagination-controls>
+    
+  <!-- modal div -->
+  <div class="modal" id="dataModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">{{selectedData?.title}}</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <pre>{{selectedData | json}}</pre>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer center-align">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
